@@ -2,13 +2,16 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Meta Viewport diperbaiki agar tidak bisa ter-zoom tidak sengaja dan pas di HP -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Daftar Pemenang Undian - Public</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="bootstrap.min.css" />
+  
   <style>
     body { 
-      padding: 15px; 
+      padding: 10px; 
       background: #f1f5f9; 
       font-family: 'Poppins', sans-serif;
     }
@@ -34,7 +37,7 @@
         padding: 15px 20px;
         border: 2px solid #e2e8f0;
         font-weight: 600;
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     .search-box input:focus { border-color: #2563eb; box-shadow: none; }
     
@@ -57,38 +60,97 @@
     .table-responsive { border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;}
     .pulse-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #10b981; margin-right: 8px; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+
+    /* ========================================================
+       📱 RESPONSIVE MOBILE (CARD VIEW)
+       Mengubah tabel menjadi susunan kartu otomatis di HP
+       ======================================================== */
+    @media screen and (max-width: 768px) {
+        .header-title { font-size: 1.5rem; }
+        body { padding: 5px; }
+        .main-container { padding: 15px 10px; }
+        .table-responsive { border: none !important; overflow: visible; background: transparent; }
+
+        /* Sembunyikan header tabel di mobile */
+        #tabelPemenang thead { display: none; }
+        
+        #tabelPemenang, #tabelPemenang tbody, #tabelPemenang tr, #tabelPemenang td {
+            display: block;
+            width: 100%;
+        }
+
+        /* Ubah setiap baris tabel menjadi Card */
+        #tabelPemenang tr {
+            margin-bottom: 15px;
+            background-color: #ffffff !important;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        #tabelPemenang td {
+            text-align: right !important;
+            padding-left: 45% !important;
+            position: relative;
+            border-bottom: 1px solid #f1f5f9;
+            font-size: 0.95rem;
+        }
+
+        #tabelPemenang td:last-child { border-bottom: 0; }
+
+        /* Mengambil judul kolom dari data-label HTML untuk ditampilkan di kiri */
+        #tabelPemenang td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 15px;
+            width: 40%;
+            text-align: left;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        /* Efek sorotan khusus nama agar lebih menonjol di HP */
+        .mobile-name-highlight {
+            background: #eff6ff !important;
+            color: #2563eb !important;
+            font-size: 1.1rem !important;
+        }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12 col-lg-10">
+  <div class="container p-0 p-md-3">
+    <div class="row justify-content-center m-0">
+      <div class="col-12 col-lg-10 p-2">
         
         <div class="text-center mb-4 mt-2">
             <h2 class="header-title">PAPAN <span>PEMENANG</span> UNDIAN</h2>
-            <div class="badge bg-light text-dark border py-2 px-3 fs-6">
-                <span class="pulse-indicator"></span> SISTEM SINKRONISASI LIVE AKTIF
+            <div class="badge bg-light text-dark border py-2 px-3 fs-6 rounded-pill shadow-sm">
+                <span class="pulse-indicator"></span> LIVE SINKRONISASI AKTIF
             </div>
         </div>
 
         <div class="main-container">
           <div class="search-box">
-            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Cari Nama atau NIK Anda di sini..." onkeyup="filterTabel()">
+            <input type="text" id="searchInput" class="form-control form-control-lg" placeholder="🔍 Cari Nama atau NIK Anda..." onkeyup="filterTabel()">
           </div>
 
           <div class="table-responsive">
             <table class="table table-striped text-center mb-0" id="tabelPemenang">
               <thead>
                 <tr>
-                  <th>No</th>
-                  <th>Nama Lengkap</th>
-                  <th>NIK</th>
-                  <th>Putaran</th>
-                  <th>Hadiah</th>
+                  <th width="10%">No</th>
+                  <th width="35%" class="text-start ps-4">Nama Lengkap</th>
+                  <th width="20%">NIK</th>
+                  <th width="15%">Putaran</th>
+                  <th width="20%">Hadiah</th>
                 </tr>
               </thead>
               <tbody>
-                <tr><td colspan="5" class="py-4">Sedang memuat data...</td></tr>
+                <tr><td colspan="5" class="py-5 text-center text-muted fw-bold">Sedang memuat data terbaru...</td></tr>
               </tbody>
             </table>
           </div>
@@ -107,13 +169,11 @@
 
     async function muatPemenangPublic() {
       try {
-        // Fetch langsung ke file json yang ada di sebelahnya dengan time-buster anti cache
         const res = await fetch("log_pemenang.json?_=" + new Date().getTime());
         
         if(res.ok) {
             semuaDataPemenang = await res.json();
             
-            // Render ulang tabel
             const isSearching = document.getElementById("searchInput").value.length > 0;
             if(!isSearching) {
                 renderTabelPublic(semuaDataPemenang);
@@ -132,7 +192,7 @@
       tbody.innerHTML = "";
       
       if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="5" class="py-5 text-muted fw-bold">Roda undian belum diputar. Pemenang akan muncul di sini.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="5" class="py-5 text-center text-muted fw-bold">Roda undian belum diputar. Pemenang akan muncul di sini.</td></tr>`;
         return;
       }
 
@@ -142,12 +202,13 @@
       dataTerbalik.forEach((p, index) => {
         const tr = document.createElement("tr");
         
+        // Atribut data-label ditambahkan agar CSS bisa membacanya saat di HP
         tr.innerHTML = `
-          <td class="fw-bold">${data.length - index}</td>
-          <td class="fw-bold text-start ps-4" style="color: #2563eb;">${p.nama}</td>
-          <td>${p.nik}</td>
-          <td>Ke-${p.putaran || "-"}</td>
-          <td class="fw-bold text-success">${p.hadiah || "-"}</td>
+          <td data-label="No Undian" class="fw-bold text-muted">${data.length - index}</td>
+          <td data-label="Nama Lengkap" class="fw-bold text-start ps-md-4 mobile-name-highlight" style="color: #2563eb;">${p.nama}</td>
+          <td data-label="NIK Peserta">${p.nik}</td>
+          <td data-label="Putaran Ke">Putaran ${p.putaran || "-"}</td>
+          <td data-label="Hadiah" class="fw-bold text-success">${p.hadiah || "-"}</td>
         `;
         
         tbody.appendChild(tr);
@@ -169,7 +230,6 @@
       renderTabelPublic(dataFiltered);
     }
 
-    // Interval fetch ke json statis. 4 Detik sangat aman untuk server sekelas Vercel/Cloudflare.
     setInterval(() => {
         muatPemenangPublic();
     }, 4000);
