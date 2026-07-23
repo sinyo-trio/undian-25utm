@@ -33,5 +33,26 @@
         "nama": "ABDUL HADI SE MM",
         "putaran": 1,
         "hadiah": "-"
+    },
+    {
+        "timestamp": "23-07-2026 14:23:26",
+        "nik": "3526041509750002",
+        "nama": "BANGUN SENTOSA DH",
+        "putaran": 2,
+        "hadiah": "Kulkas"
+    },
+    {
+        "timestamp": "23-07-2026 14:23:26",
+        "nik": "3526046907860004",
+        "nama": "NURUL MASNUNAH",
+        "putaran": 2,
+        "hadiah": "Kulkas"
+    },
+    {
+        "timestamp": "23-07-2026 14:23:26",
+        "nik": "3526040106760002",
+        "nama": "MOCH.AMIN",
+        "putaran": 2,
+        "hadiah": "Kulkas"
     }
 ]
