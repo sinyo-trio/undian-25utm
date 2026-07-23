@@ -1,1 +1,23 @@
-[]
+[
+    {
+        "timestamp": "23-07-2026 17:02:59",
+        "nik": "3529136702060002",
+        "nama": "HUSNUL KHOTIMAH",
+        "putaran": 1,
+        "hadiah": "Televisi"
+    },
+    {
+        "timestamp": "23-07-2026 17:02:59",
+        "nik": "3526042907910003",
+        "nama": "ABDUL HOLIK",
+        "putaran": 1,
+        "hadiah": "Televisi"
+    },
+    {
+        "timestamp": "23-07-2026 17:02:59",
+        "nik": "3528111704040005",
+        "nama": "FARIS AHMAD FAUZI MAWARDI",
+        "putaran": 1,
+        "hadiah": "Televisi"
+    }
+]
