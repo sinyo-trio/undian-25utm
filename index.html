@@ -2,7 +2,6 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <!-- Meta Viewport diperbaiki agar tidak bisa ter-zoom tidak sengaja dan pas di HP -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Daftar Pemenang Undian - Public</title>
   
@@ -71,7 +70,6 @@
         .main-container { padding: 15px 10px; }
         .table-responsive { border: none !important; overflow: visible; background: transparent; }
 
-        /* Sembunyikan header tabel di mobile */
         #tabelPemenang thead { display: none; }
         
         #tabelPemenang, #tabelPemenang tbody, #tabelPemenang tr, #tabelPemenang td {
@@ -79,7 +77,6 @@
             width: 100%;
         }
 
-        /* Ubah setiap baris tabel menjadi Card */
         #tabelPemenang tr {
             margin-bottom: 15px;
             background-color: #ffffff !important;
@@ -99,7 +96,6 @@
 
         #tabelPemenang td:last-child { border-bottom: 0; }
 
-        /* Mengambil judul kolom dari data-label HTML untuk ditampilkan di kiri */
         #tabelPemenang td::before {
             content: attr(data-label);
             position: absolute;
@@ -112,7 +108,6 @@
             font-size: 0.85rem;
         }
 
-        /* Efek sorotan khusus nama agar lebih menonjol di HP */
         .mobile-name-highlight {
             background: #eff6ff !important;
             color: #2563eb !important;
@@ -127,7 +122,8 @@
       <div class="col-12 col-lg-10 p-2">
         
         <div class="text-center mb-4 mt-2">
-            <h2 class="header-title">PAPAN <span>PEMENANG</span> UNDIAN</h2>
+            <!-- Judul akan berubah otomatis sesuai putaran terakhir -->
+            <h2 id="judulPapan" class="header-title">PAPAN <span>PEMENANG</span></h2>
             <div class="badge bg-light text-dark border py-2 px-3 fs-6 rounded-pill shadow-sm">
                 <span class="pulse-indicator"></span> LIVE SINKRONISASI AKTIF
             </div>
@@ -166,6 +162,7 @@
 
   <script>
     let semuaDataPemenang = [];
+    let putaranTertinggiSaatIni = 0;
 
     async function muatPemenangPublic() {
       try {
@@ -189,22 +186,30 @@
 
     function renderTabelPublic(data) {
       const tbody = document.querySelector("#tabelPemenang tbody");
+      const judulPapan = document.getElementById("judulPapan");
       tbody.innerHTML = "";
       
       if (data.length === 0) {
+        judulPapan.innerHTML = `PAPAN <span>PEMENANG</span>`;
         tbody.innerHTML = `<tr><td colspan="5" class="py-5 text-center text-muted fw-bold">Roda undian belum diputar. Pemenang akan muncul di sini.</td></tr>`;
         return;
       }
 
-      // Tampilkan dari yang paling baru menang
-      const dataTerbalik = [...data].reverse();
+      // 1. Cari angka putaran tertinggi dari seluruh data JSON
+      putaranTertinggiSaatIni = Math.max(...data.map(p => parseInt(p.putaran) || 0));
 
-      dataTerbalik.forEach((p, index) => {
+      // Update Judul agar peserta tahu ini pemenang putaran ke berapa
+      judulPapan.innerHTML = `PEMENANG <span>PUTARAN ${putaranTertinggiSaatIni}</span>`;
+
+      // 2. Filter data agar HANYA menampilkan pemenang di putaran tertinggi tersebut
+      let dataPutaranTerakhir = data.filter(p => (parseInt(p.putaran) || 0) === putaranTertinggiSaatIni);
+
+      // 3. Render secara ASCENDING (Berurutan dari No. 1 di atas)
+      dataPutaranTerakhir.forEach((p, index) => {
         const tr = document.createElement("tr");
         
-        // Atribut data-label ditambahkan agar CSS bisa membacanya saat di HP
         tr.innerHTML = `
-          <td data-label="No Undian" class="fw-bold text-muted">${data.length - index}</td>
+          <td data-label="No Undian" class="fw-bold text-muted">${index + 1}</td>
           <td data-label="Nama Lengkap" class="fw-bold text-start ps-md-4 mobile-name-highlight" style="color: #2563eb;">${p.nama}</td>
           <td data-label="NIK Peserta">${p.nik}</td>
           <td data-label="Putaran Ke">Putaran ${p.putaran || "-"}</td>
@@ -222,17 +227,38 @@
         return;
       }
 
+      // Jika user melakukan pencarian, kita cari dari SEMUA putaran (bukan hanya putaran terakhir)
+      // agar mereka tetap bisa menemukan namanya meski menang di putaran sebelumnya.
       const dataFiltered = semuaDataPemenang.filter(p => 
         p.nama.toLowerCase().includes(keyword) || 
         p.nik.toLowerCase().includes(keyword)
       );
       
-      renderTabelPublic(dataFiltered);
+      const tbody = document.querySelector("#tabelPemenang tbody");
+      tbody.innerHTML = "";
+      
+      if (dataFiltered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-5 text-center text-muted fw-bold">Pencarian tidak ditemukan.</td></tr>`;
+        return;
+      }
+
+      dataFiltered.forEach((p, index) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td data-label="Hasil Cari" class="fw-bold text-muted">${index + 1}</td>
+          <td data-label="Nama Lengkap" class="fw-bold text-start ps-md-4 mobile-name-highlight" style="color: #2563eb;">${p.nama}</td>
+          <td data-label="NIK Peserta">${p.nik}</td>
+          <td data-label="Putaran Ke">Putaran ${p.putaran || "-"}</td>
+          <td data-label="Hadiah" class="fw-bold text-success">${p.hadiah || "-"}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
 
+    // Interval dipercepat menjadi 2.5 detik untuk menangkap Vercel seketika setelah selesai deploy
     setInterval(() => {
         muatPemenangPublic();
-    }, 4000);
+    }, 2500);
 
     muatPemenangPublic();
   </script>
