@@ -1,1 +1,37 @@
-[]
+[
+    {
+        "timestamp": "23-07-2026 13:39:29",
+        "nik": "3578161906860004",
+        "nama": "FATHURROHMAN S.PD.I",
+        "putaran": 1,
+        "hadiah": "Televisi"
+    },
+    {
+        "timestamp": "23-07-2026 13:39:29",
+        "nik": "3526122505060004",
+        "nama": "ACHMAD FIKRI ANDIKA AKBAR",
+        "putaran": 1,
+        "hadiah": "Televisi"
+    },
+    {
+        "timestamp": "23-07-2026 13:39:29",
+        "nik": "3526016904760001",
+        "nama": "SRI KARTINI",
+        "putaran": 1,
+        "hadiah": "Televisi"
+    },
+    {
+        "timestamp": "23-07-2026 13:39:29",
+        "nik": "3526041608750001",
+        "nama": "MUSAR",
+        "putaran": 1,
+        "hadiah": "Televisi"
+    },
+    {
+        "timestamp": "23-07-2026 13:39:29",
+        "nik": "3526046711690004",
+        "nama": "NUZULIS LAILATUL BADRIYAH",
+        "putaran": 1,
+        "hadiah": "Televisi"
+    }
+]
