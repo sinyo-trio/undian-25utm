@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Pemenang Undian - Public</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;800;900&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="bootstrap.min.css" />
+  <style>
+    body { 
+      padding: 15px; 
+      background: #f1f5f9; 
+      font-family: 'Poppins', sans-serif;
+    }
+    .main-container {
+      background: #ffffff;
+      padding: 25px 20px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+    .header-title {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 900;
+      color: #0f172a;
+      margin-bottom: 5px;
+      text-transform: uppercase;
+      font-size: 1.8rem;
+    }
+    .header-title span { color: #2563eb; }
+    .search-box { margin-bottom: 25px; }
+    .search-box input {
+        border-radius: 12px;
+        padding: 15px 20px;
+        border: 2px solid #e2e8f0;
+        font-weight: 600;
+        font-size: 1.1rem;
+    }
+    .search-box input:focus { border-color: #2563eb; box-shadow: none; }
+    
+    .table th {
+      background-color: #2563eb !important;
+      color: white !important;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 15px !important;
+      border: none;
+    }
+    .table td {
+      vertical-align: middle;
+      font-size: 1.1rem;
+      padding: 15px 10px !important;
+      font-weight: 500;
+      color: #1e293b;
+    }
+    .table-striped>tbody>tr:nth-of-type(odd)>* { background-color: #f8fafc; }
+    .table-responsive { border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;}
+    .pulse-indicator { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #10b981; margin-right: 8px; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-lg-10">
+        
+        <div class="text-center mb-4 mt-2">
+            <h2 class="header-title">PAPAN <span>PEMENANG</span> UNDIAN</h2>
+            <div class="badge bg-light text-dark border py-2 px-3 fs-6">
+                <span class="pulse-indicator"></span> SISTEM SINKRONISASI LIVE AKTIF
+            </div>
+        </div>
+
+        <div class="main-container">
+          <div class="search-box">
+            <input type="text" id="searchInput" class="form-control" placeholder="🔍 Cari Nama atau NIK Anda di sini..." onkeyup="filterTabel()">
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-striped text-center mb-0" id="tabelPemenang">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama Lengkap</th>
+                  <th>NIK</th>
+                  <th>Putaran</th>
+                  <th>Hadiah</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr><td colspan="5" class="py-4">Sedang memuat data...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="text-center mt-3 mb-5">
+            <small class="text-muted fw-bold" id="lastUpdate">Memeriksa pembaruan...</small>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let semuaDataPemenang = [];
+
+    async function muatPemenangPublic() {
+      try {
+        // Fetch langsung ke file json yang ada di sebelahnya dengan time-buster anti cache
+        const res = await fetch("log_pemenang.json?_=" + new Date().getTime());
+        
+        if(res.ok) {
+            semuaDataPemenang = await res.json();
+            
+            // Render ulang tabel
+            const isSearching = document.getElementById("searchInput").value.length > 0;
+            if(!isSearching) {
+                renderTabelPublic(semuaDataPemenang);
+            }
+            
+            const now = new Date();
+            document.getElementById("lastUpdate").innerText = "Pembaruan Terakhir: " + now.toLocaleTimeString('id-ID');
+        }
+      } catch (err) {
+        console.error("Gagal memuat data dari server.", err);
+      }
+    }
+
+    function renderTabelPublic(data) {
+      const tbody = document.querySelector("#tabelPemenang tbody");
+      tbody.innerHTML = "";
+      
+      if (data.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="py-5 text-muted fw-bold">Roda undian belum diputar. Pemenang akan muncul di sini.</td></tr>`;
+        return;
+      }
+
+      // Tampilkan dari yang paling baru menang
+      const dataTerbalik = [...data].reverse();
+
+      dataTerbalik.forEach((p, index) => {
+        const tr = document.createElement("tr");
+        
+        tr.innerHTML = `
+          <td class="fw-bold">${data.length - index}</td>
+          <td class="fw-bold text-start ps-4" style="color: #2563eb;">${p.nama}</td>
+          <td>${p.nik}</td>
+          <td>Ke-${p.putaran || "-"}</td>
+          <td class="fw-bold text-success">${p.hadiah || "-"}</td>
+        `;
+        
+        tbody.appendChild(tr);
+      });
+    }
+
+    function filterTabel() {
+      const keyword = document.getElementById("searchInput").value.toLowerCase();
+      if (!keyword) {
+        renderTabelPublic(semuaDataPemenang);
+        return;
+      }
+
+      const dataFiltered = semuaDataPemenang.filter(p => 
+        p.nama.toLowerCase().includes(keyword) || 
+        p.nik.toLowerCase().includes(keyword)
+      );
+      
+      renderTabelPublic(dataFiltered);
+    }
+
+    // Interval fetch ke json statis. 4 Detik sangat aman untuk server sekelas Vercel/Cloudflare.
+    setInterval(() => {
+        muatPemenangPublic();
+    }, 4000);
+
+    muatPemenangPublic();
+  </script>
+</body>
+</html>
