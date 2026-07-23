@@ -12,5 +12,40 @@
         "nama": "FARIS AHMAD FAUZI MAWARDI",
         "putaran": 1,
         "hadiah": "Televisi"
+    },
+    {
+        "timestamp": "23-07-2026 17:07:01",
+        "nik": "3528023011000005",
+        "nama": "FAIZ ZAMZAM ZAKARIYA",
+        "putaran": 2,
+        "hadiah": "Kulkas"
+    },
+    {
+        "timestamp": "23-07-2026 17:07:01",
+        "nik": "3515105012050004",
+        "nama": "LAILATUL RAHMAH",
+        "putaran": 2,
+        "hadiah": "Kulkas"
+    },
+    {
+        "timestamp": "23-07-2026 17:07:01",
+        "nik": "3574012008980003",
+        "nama": "ABDUL GOFUR",
+        "putaran": 2,
+        "hadiah": "Kulkas"
+    },
+    {
+        "timestamp": "23-07-2026 17:07:01",
+        "nik": "3526047012090001",
+        "nama": "NUR WAHYUNI",
+        "putaran": 2,
+        "hadiah": "Kulkas"
+    },
+    {
+        "timestamp": "23-07-2026 17:07:01",
+        "nik": "3574025603770001",
+        "nama": "ERLY RUSIANA",
+        "putaran": 2,
+        "hadiah": "Kulkas"
     }
 ]
