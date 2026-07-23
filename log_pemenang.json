@@ -1,1 +1,37 @@
-[]
+[
+    {
+        "timestamp": "23-07-2026 14:34:03",
+        "nik": "3578281803980001",
+        "nama": "MUHAMMAD ZAKY PURNOMO",
+        "putaran": 1,
+        "hadiah": "-"
+    },
+    {
+        "timestamp": "23-07-2026 14:34:03",
+        "nik": "3526112207880001",
+        "nama": "IMAM GHAZALI",
+        "putaran": 1,
+        "hadiah": "-"
+    },
+    {
+        "timestamp": "23-07-2026 14:34:03",
+        "nik": "3526025206020001",
+        "nama": "DIAN HIDAYANTI",
+        "putaran": 1,
+        "hadiah": "-"
+    },
+    {
+        "timestamp": "23-07-2026 14:34:03",
+        "nik": "3526041612230001",
+        "nama": "ABDUL RIZAL",
+        "putaran": 1,
+        "hadiah": "-"
+    },
+    {
+        "timestamp": "23-07-2026 14:34:03",
+        "nik": "3526106410030001",
+        "nama": "MAYYATUR ROHMAH",
+        "putaran": 1,
+        "hadiah": "-"
+    }
+]
